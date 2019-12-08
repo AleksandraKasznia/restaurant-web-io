@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-
-const API = "https://api1.www.3drepo.io/api/";
-const LOGIN_URL = API + "login";
+import { LOGIN_URL } from '../../constants/apiEndpoints'
+import './SignInPage.css';
+import Logo from '../../Icons/waiter.svg';
 
 function SignInPage() {
     const [username, setUsername] = useState("");
@@ -27,7 +27,8 @@ function SignInPage() {
     };
 
     return (
-      <div>
+      <div className="signInPage">
+          <img src={Logo} />
           <form
             onSubmit={event => {
                 event.preventDefault();
@@ -40,21 +41,21 @@ function SignInPage() {
             }}>
               <label>
                   Username or email:
+              </label>
                   <input
                       type="text"
                       value={username}
                       onChange={event => setUsername(event.target.value)}
                   />
-              </label>
               <label>
                   Password:
+              </label>
                   <input
                       type="password"
                       value={password}
                       onChange={event => setPassword(event.target.value)}
                   />
-              </label>
-              <button type="submit">
+              <button>
                   Log In
               </button>
           </form>

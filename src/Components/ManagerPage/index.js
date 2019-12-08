@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import './ManagerPage.css';
+import {Link} from "react-router-dom";
+import {LANDING} from "../../constants/routes";
+import LogOut from "../LogOut";
 
 function ManagerPage() {
 
@@ -15,7 +18,8 @@ function ManagerPage() {
 
 
     return (
-        <div>
+        <div className="managerPager">
+            <LogOut/>
             <section>
                 <h1>Employees</h1>
                 <div className="formsSection">

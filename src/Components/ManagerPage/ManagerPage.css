@@ -7,7 +7,7 @@
 
 }
 
-form{
+.managerPage form{
     display: flex;
     flex-direction: column;
     background-color: rgb(228,228,234);
@@ -15,15 +15,15 @@ form{
     padding: 2%;
 }
 
-input{
+.managerPage input{
     width: 70%;
 }
 
-h1,h3{
+.managerPage h1,h3{
     text-align: center;
 }
 
-form button{
+.managerPage form button{
     background-color: #09d3ac;
     width: 20%;
 }
