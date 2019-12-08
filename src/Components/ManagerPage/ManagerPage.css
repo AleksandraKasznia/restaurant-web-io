@@ -1,0 +1,29 @@
+.formsSection{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.addEmployeeForm{
+
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(228,228,234);
+    width: 20%;
+    padding: 2%;
+}
+
+input{
+    width: 70%;
+}
+
+h1,h3{
+    text-align: center;
+}
+
+form button{
+    background-color: #09d3ac;
+    width: 20%;
+}
