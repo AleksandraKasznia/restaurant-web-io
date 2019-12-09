@@ -24,7 +24,9 @@ function ManagerPage() {
                 <h1>Employees</h1>
                 <div className="formsSection">
                     <form className="addEmployeeForm"/*onSubmit={this.addUser}*/>
+                        <div className="header">
                         <h3>Add User</h3>
+                        </div>
                         <label>
                             <div className="description">
                                 Choose role:

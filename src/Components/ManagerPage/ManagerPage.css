@@ -23,6 +23,11 @@
     text-align: center;
 }
 
+.header{
+    background-color: #81b29a;
+    border: 0.15em solid #3d405b;
+}
+
 .managerPage form button{
     background-color: #09d3ac;
     width: 20%;

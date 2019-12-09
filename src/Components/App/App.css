@@ -1,8 +1,11 @@
+body {
+  background-color: #e07a5f;
+}
 form{
-  border: 0.2em solid #D40000;
+  border: 0.2em solid #81b29a;
   display: flex;
   flex-direction: column;
-  background-color: rgb(228,228,234);
+  background-color: #fdfaf4;
   width: 20%;
   padding: 2%;
 }
@@ -11,21 +14,16 @@ input{
   width: 70%;
 }
 
-form button{
-  background-color: #09d3ac;
-  width: 20%;
-}
-
 form button {
   margin-top: 10%;
   width: 40%;
   text-align: center;
   position: relative;
   background: none;
-  color: #D40000;
+  color: #3d405b;
   text-transform: uppercase;
   text-decoration: none;
-  border: 0.2em solid #D40000;
+  border: 0.2em solid #3d405b;
   padding: 0.5em 1em;
 }
 
@@ -34,7 +32,7 @@ form button::before {
   display: block;
   position: absolute;
   width: 10%;
-  background: #E4E4EA;
+  background: #fbf1ef;
   height: 0.3em;
   right: 20%;
   top: -0.21em;
@@ -48,7 +46,7 @@ form button::after {
   display: block;
   position: absolute;
   width: 10%;
-  background: #E4E4EA;
+  background: #fbf1ef;
   height: 0.3em;
   left: 20%;
   bottom: -0.25em;

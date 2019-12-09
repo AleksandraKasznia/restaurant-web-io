@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import './BarmanPage.css';
+import './CookPage.css';
 import Order from "../Order";
 
 import LogOut from "../LogOut";
 
-function BarmanPage() {
+function CookPage() {
     const order = {
         orderId: "123",
         menuItems: ["kiełbasa", "jabłko"],
@@ -32,7 +32,7 @@ function BarmanPage() {
         <div>
             <LogOut/>
             <button> Refresh </button>
-            <div className="barmanPage">
+            <div className="cookPage">
 
                 <div>
                     <h1>Awaiting Orders</h1>
@@ -51,4 +51,4 @@ function BarmanPage() {
     )
 }
 
-export default BarmanPage;
+export default CookPage;

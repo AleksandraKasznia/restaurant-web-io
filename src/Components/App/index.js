@@ -6,6 +6,8 @@ import LandingPage from '../LandingPage';
 import SignInPage from '../SignInPage';
 import ManagerPage from '../ManagerPage';
 import BarmanPage from '../BarmanPage';
+import CookPage from "../CookPage";
+import SupplierPage from "../SupplierPage";
 
 import * as ROUTES from '../../constants/routes'
 
@@ -17,7 +19,9 @@ function App() {
                     <Route exact path={ROUTES.LANDING} component={LandingPage} />
                     <Route path={ROUTES.SIGN_IN} component={SignInPage}/>
                     <Route path={ROUTES.MANAGER} component={ManagerPage}/>
-                <Route path={ROUTES.BARMAN} component={BarmanPage}/>
+                    <Route path={ROUTES.BARMAN} component={BarmanPage}/>
+                    <Route path={ROUTES.COOK} component={CookPage}/>
+                    <Route path={ROUTES.SUPPLIER} component={SupplierPage}/>
             </Router>
         );
 }

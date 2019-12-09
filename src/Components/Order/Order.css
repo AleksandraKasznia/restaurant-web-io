@@ -1,0 +1,14 @@
+.orderId {
+    margin-top: -1vw;
+    background-color: #81b29a;
+    padding: 1vmin;
+}
+
+.menuItems {
+    background-color: #fbf1ef;
+    padding: 1vmin;
+}
+
+li{
+    list-style-type: none;
+}
