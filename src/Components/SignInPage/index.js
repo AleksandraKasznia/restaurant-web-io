@@ -9,20 +9,30 @@ function SignInPage() {
 
     const credentials = {
         "username": username,
-        "password": password
+        "password": password,
+        "returnSecureToken" : true
     };
 
     var post = {
         method: 'POST',
         headers: {
-            'Access-Control-Allow-Origin': "*",
-            'Access-Control-Allow-Credentials': 'true',
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-            'Cookie': 'connect.sid=:sessionId'
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+            'Accept-Encoding': 'gzip, deflate, br',
+'Accept-Language': 'pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7',
+'Cache-Control': 'max-age=0',
+'Connection': 'keep-alive',
+'Content-Length': '32',
+'Content-Type': 'application/x-www-form-urlencoded',
+'Cookie': 'JSESSIONID=E472A575A1533AAD7A9B115B6C0BDFC1',
+'Host': 'localhost:8080',
+'Origin': 'http://localhost:8080',
+'Referer': 'http://localhost:8080/login',
+'Sec-Fetch-Mode': 'navigate',
+'Sec-Fetch-Site': 'same-origin',
+'Sec-Fetch-User': '?1',
+'Upgrade-Insecure-Requests': '1',
+'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'
         },
-        credentials: 'include',
-        mode: "cors",
         body: JSON.stringify(credentials)
     };
 
@@ -32,7 +42,7 @@ function SignInPage() {
           <form
             onSubmit={event => {
                 event.preventDefault();
-                console.log(credentials);
+                console.log(JSON.stringify(credentials));
                 fetch(LOGIN_URL, post)
                     .then(function(response) {
                         console.log(response)

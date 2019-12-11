@@ -275,6 +275,10 @@ function ManagerPage() {
                     </form>
                 </div>
             </section>
+            <section>
+                <h1>Add a table</h1>
+                <button>Add!</button>
+            </section>
         </div>
     );
 }
