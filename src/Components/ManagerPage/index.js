@@ -3,6 +3,7 @@ import './ManagerPage.css';
 import {Link} from "react-router-dom";
 import {LANDING} from "../../constants/routes";
 import LogOut from "../LogOut";
+import Select from "react-select";
 
 function ManagerPage() {
 
@@ -16,6 +17,13 @@ function ManagerPage() {
     const [neededProducts, setNeededProducts] = useState({products: []});
     const [price, setPrice] = useState(0.0);
 
+    const possibleRoles = ["Waiter", "Barman", "Cook", "Supplier", "Manager"];
+    const rolesOptions = possibleRoles.map((role) => ({value: role, label: role}));
+
+    let addUserReq = {
+        method: 'POST',
+        body: JSON.stringify({})
+    }
 
     return (
         <div className="managerPager">
@@ -31,20 +39,12 @@ function ManagerPage() {
                             <div className="description">
                                 Choose role:
                             </div>
-
-                            <select>
-                                <option value="waiter">Waiter</option>
-                                <option value="barman">Barman</option>
-                                <option value="cook">Cook</option>
-                                <option value="supplier">Supplier</option>
-                                <option value="manager">Manager</option>
-                            </select>
+                            <Select options={rolesOptions}/>
                         </label>
                         <label>
                             <div className="description">
                                 Full name:
                             </div>
-
                             <input
                                 type="text"
                                 value={username}
