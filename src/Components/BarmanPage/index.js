@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './BarmanPage.css';
 import Order from "../Order";
-
 import LogOut from "../LogOut";
+import {BARMAN_ENDPOINT} from "../../constants/apiEndpoints";
 
 function BarmanPage() {
     const order = {
@@ -24,9 +24,21 @@ function BarmanPage() {
     };
 
     function buttonValue(x) {return(x.isBeingPrepared) ? "Ready!": "Accept"}
-    const [orders, setOrders] = useState([order, order1, order3]);
-    const [awaitingOrders, setAwaitingOrders] = useState((orders.filter((order) => !order.isBeingPrepared)).map((item) => <div className="order"><Order {...item}/><button className={item.orderId}>{buttonValue(item)}</button></div>));
-    const [ordersBeingPrepared, setOrdersBeingPrepared] = useState((orders.filter((order) => order.isBeingPrepared)).map((item) => <div className="order"><Order {...item}/><button className={item.orderId}>{buttonValue(item)}</button></div>));
+    const [orders, setOrders] = useState([]);
+    // const [awaitingOrders, setAwaitingOrders] = useState((orders.filter((order) => !order.isBeingPrepared)).map((item) => <div className="order"><Order {...item}/><button className={item.orderId}>{buttonValue(item)}</button></div>));
+    // const [ordersBeingPrepared, setOrdersBeingPrepared] = useState((orders.filter((order) => order.isBeingPrepared)).map((item) => <div className="order"><Order {...item}/><button className={item.orderId}>{buttonValue(item)}</button></div>));
+
+    const getOrdersURL = BARMAN_ENDPOINT + 'getBeverageOrders';
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = fetch(getOrdersURL,{method: 'GET', credentials: 'include'});
+            setOrders(result.data);
+            console.log(orders);
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <div>
@@ -37,13 +49,13 @@ function BarmanPage() {
                 <div>
                     <h1>Awaiting Orders</h1>
                     <div className="ordersPanel">
-                        {awaitingOrders}
+                        {/*{awaitingOrders}*/}
                     </div>
                 </div>
                 <div>
                     <h1>Your Orders</h1>
                     <div className="ordersPanel">
-                        {ordersBeingPrepared}
+                        {/*{ordersBeingPrepared}*/}
                     </div>
                 </div>
             </div>

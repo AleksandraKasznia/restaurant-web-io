@@ -6,13 +6,16 @@ import Logo from '../../Icons/waiter.svg';
 function SignInPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [data, setData] = useState(null);
 
 
     const credentials = 'username='+ username + '&password='+ password;
 
     var post = {
         method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        credentials: 'include',
         body: credentials
     };
 
@@ -22,12 +25,9 @@ function SignInPage() {
           <form
             onSubmit={event => {
                 event.preventDefault();
-                console.log(credentials, username, password);
                 fetch(LOGIN_URL, post)
-                    .then(function(response) {
-                        console.log(response.data)
-                    })
-
+                    .then(response => response.json())
+                    .then(data => {console.log(data);})
             }}>
               <label>
                   Username or email:
