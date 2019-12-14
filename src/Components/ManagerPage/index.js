@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import './ManagerPage.css';
-import {Link} from "react-router-dom";
-import {LANDING} from "../../constants/routes";
 import LogOut from "../LogOut";
 import Select from "react-select";
 import {MANAGER_ENDPOINT} from "../../constants/apiEndpoints";
 
 const getAllProductsURL = MANAGER_ENDPOINT + '/products';
+const getAllUsersURL = MANAGER_ENDPOINT + '/fetchUsers';
 const addUserURL = MANAGER_ENDPOINT + '/signup';
 const deleteUserURL = MANAGER_ENDPOINT + '/deleteUser/';
+const updateUserURL = MANAGER_ENDPOINT + '/update';
 const addMenuItemURL = MANAGER_ENDPOINT + '/addMenuItem';
-const addTableURL = MANAGER_ENDPOINT + "/addTable";
+const addTablesURL = MANAGER_ENDPOINT + "/addTables/";
+const deleteMenuItemURL = MANAGER_ENDPOINT + "/deleteMenuItem/";
+const addProductURL = MANAGER_ENDPOINT + '/addProductItem';
 
 function ManagerPage() {
 
@@ -19,16 +21,20 @@ function ManagerPage() {
     const [usernameToUpdate, setUsernameToUpdate] = useState("");
     const [emailToUpdate, setEmailToUpdate] = useState("");
     const [passwordToAdd, setPasswordToAdd] = useState("");
+    const [passwordToUpdate, setPasswordToUpdate] = useState("");
     const [userIdToDelete, setUserIdToDelete] = useState("");
-    const [userIdToUpdate, setUserIdToUpdate] = useState("");
     const [roleToUpdate, setRoleToUpdate] = useState([]);
     const [roleToAdd, setRoleToAdd] = useState([]);
     const [itemNameToAdd, setItemNameToAdd] = useState("");
+    const [itemNameToDelete, setItemNameToDelete] = useState("");
     const [isDishOrDrinkToAdd, setIsDishOrDrinkToAdd] = useState("");
     const [neededProductsToAdd, setNeededProductsToAdd] = useState(null);
     const [priceToAdd, setPriceToAdd] = useState(0.0);
     const [numberOfTables, setNumberOfTables] = useState(1);
+    const [productName, setProductName] = useState("");
+    const [productAmount, setProductAmount] = useState(0);
     const [allProducts, setAllProducts] = useState([]);
+    const [doNeedToRefresh, setDoNeedToRefresh] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
     const newUser = {
         username: usernameToAdd,
@@ -39,14 +45,21 @@ function ManagerPage() {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchProductData = async () => {
             fetch(getAllProductsURL,{method: 'GET', credentials: 'include'})
                 .then(result => result.json())
                 .then(data => setAllProducts(data));
         };
 
-        fetchData();
-    }, []);
+        const fetchUserData = async () => {
+            fetch(getAllUsersURL, {method: 'GET', credentials: 'include'})
+                .then(result => result.json())
+                .then(data => setAllUsers(data));
+        };
+
+        fetchProductData();
+        fetchUserData();
+    }, [doNeedToRefresh]);
 
     const possibleRoles = ["Waiter", "Barman", "Cook", "Supplier", "Manager"];
     const rolesOptions = possibleRoles.map((role) => ({value: role.toUpperCase(), label: role}));
@@ -67,6 +80,18 @@ function ManagerPage() {
         },
         credentials: 'include',
     };
+    const updateUserReq = {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            username: usernameToUpdate,
+            password: passwordToUpdate,
+            authorities: roleToUpdate,
+            email: emailToUpdate
+        })
+    };
     const addMenuItemReq = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -78,10 +103,25 @@ function ManagerPage() {
             itemsNeededNames: neededProductsToAdd,
         })
     };
+    const deleteMenuItemReq = {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    };
     const addTableReq = {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({
+        })
+    };
+    const addProductReq = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'include',
+        body: JSON.stringify({
+            name: productName,
+            amount: productAmount
         })
     };
 
@@ -95,6 +135,7 @@ function ManagerPage() {
                         event.preventDefault();
                         fetch(addUserURL, addUserReq)
                             .then(response => console.log(response))
+                            .then(() => setDoNeedToRefresh(!doNeedToRefresh))
                     }}>
                         <div className="header">
                         <h3>Add User</h3>
@@ -110,7 +151,7 @@ function ManagerPage() {
                         </label>
                         <label>
                             <div className="description">
-                                Full name:
+                                Username:
                             </div>
                             <input
                                 type="text"
@@ -149,7 +190,7 @@ function ManagerPage() {
                     </form>
                     <form onSubmit={event => {
                         event.preventDefault();
-                        fetch(deleteUserURL + '{' + userIdToDelete + '}',deleteUserReq)
+                        fetch(deleteUserURL + userIdToDelete, deleteUserReq)
                             .then(result => console.log(result));
                     }}>
                         <h3>Delete User</h3>
@@ -157,10 +198,9 @@ function ManagerPage() {
                             <div className="description">
                                 id:
                             </div>
-                            <input
-                                type="text"
-                                value={userIdToDelete}
-                                onChange={event => setUserIdToDelete(event.target.value)}
+                            <Select
+                                options={allUsersOptions}
+                                onChange={selectedItem => setUserIdToDelete(selectedItem.value)}
                             />
                         </label>
 
@@ -168,16 +208,19 @@ function ManagerPage() {
                             Delete
                         </button>
                     </form>
-                    <form /*onSubmit={this.updateUser}*/>
+                    <form onSubmit={event => {
+                        event.preventDefault();
+                        fetch(updateUserURL, updateUserReq)
+                            .then(result => console.log(result));
+                    }}>
                         <h3>Update User</h3>
                         <label>
                             <div className="description">
                                 id:
                             </div>
-                            <input
-                                type="text"
-                                value={userIdToDelete}
-                                onChange={event => setUserIdToDelete(event.target.value)}
+                            <Select
+                                options={allUsersOptions}
+                                onChange={selectedItem => setUsernameToUpdate(selectedItem.label)}
                             />
                         </label>
 
@@ -185,23 +228,20 @@ function ManagerPage() {
                             <div className="description">
                                 Choose role:
                             </div>
-                            <select>
-                                <option value="waiter">Waiter</option>
-                                <option value="barman">Barman</option>
-                                <option value="cook">Cook</option>
-                                <option value="supplier">Supplier</option>
-                                <option value="manager">Manager</option>
-                            </select>
+                            <Select
+                                options={rolesOptions}
+                                onChange={selectedItem => setRoleToUpdate(selectedItem.value)}
+                            />
                         </label>
 
                         <label>
                             <div className="description">
-                                Full name:
+                                Username:
                             </div>
                             <input
                                 type="text"
-                                value={usernameToAdd}
-                                onChange={event => setUsernameToAdd(event.target.value)}
+                                value={usernameToUpdate}
+                                onChange={event => setUsernameToUpdate(event.target.value)}
                             />
                         </label>
 
@@ -211,8 +251,19 @@ function ManagerPage() {
                             </div>
                             <input
                                 type="text"
-                                value={emailToAdd}
-                                onChange={event => setEmailToAdd(event.target.value)}
+                                value={emailToUpdate}
+                                onChange={event => setEmailToUpdate(event.target.value)}
+                            />
+                        </label>
+                        <label>
+                            <div className="description">
+                                Password:
+                            </div>
+
+                            <input
+                                type="password"
+                                value={passwordToUpdate}
+                                onChange={event => setPasswordToUpdate(event.target.value)}
                             />
                         </label>
 
@@ -222,7 +273,6 @@ function ManagerPage() {
                     </form>
                 </div>
             </section>
-
             <section>
                 <h1>Menu Items and Tables</h1>
                 <div className="formsSection">
@@ -231,6 +281,7 @@ function ManagerPage() {
                         console.log(neededProductsToAdd);
                         fetch(addMenuItemURL, addMenuItemReq)
                             .then(response => console.log(response))
+                            .then(() => setDoNeedToRefresh(!doNeedToRefresh))
                     }}>
                         <h3>Add Menu Item</h3>
                         <label>
@@ -261,7 +312,7 @@ function ManagerPage() {
                             <Select
                                 isMulti
                                 options={allProductsOptions}
-                                onChange={selectedItem => {setNeededProductsToAdd(selectedItem.map(item => item.value));
+                                onChange={selectedItem => {setNeededProductsToAdd(selectedItem ? selectedItem.map(item => item.value) : null);
                                 console.log(selectedItem)
                                 }}
                             />
@@ -281,7 +332,11 @@ function ManagerPage() {
                             Add
                         </button>
                     </form>
-                    <form /*onSubmit={this.deleteMenuItem}*/>
+                    <form onSubmit={event => {
+                        event.preventDefault();
+                        fetch(deleteMenuItemURL + itemNameToDelete, deleteMenuItemReq)
+                            .then(result => console.log(result))
+                    }}>
                         <h3>Delete Menu Item</h3>
                         <label>
                             <div className="description">
@@ -289,8 +344,8 @@ function ManagerPage() {
                             </div>
                             <input
                                 type="text"
-                                value={itemNameToAdd}
-                                onChange={event => itemNameToAdd(event.target.value)}
+                                value={itemNameToDelete}
+                                onChange={event => setItemNameToDelete(event.target.value)}
                             />
                         </label>
 
@@ -313,9 +368,38 @@ function ManagerPage() {
                             />
                         </label>
                         <button onClick={() => {
-                            fetch(addTableURL, addTableReq)
+                            fetch(addTablesURL + numberOfTables, addTableReq)
                                 .then(response => console.log(response))
                         }}>Add</button>
+                    </form>
+                </div>
+            </section>
+            <section>
+                <h1>Products</h1>
+                <div className="formsSection">
+                    <form onSubmit={event => {
+                        event.preventDefault();
+                        fetch(addProductURL,addProductReq)
+                            .then(result => console.log(result))
+                            .then(() => setDoNeedToRefresh(!doNeedToRefresh))
+                    }}>
+                        <label>
+                            Name:
+                            <input
+                                type="text"
+                                value={productName}
+                                onChange={event => setProductName(event.target.value)}
+                            />
+                        </label>
+                        <label>
+                            Amount
+                            <input
+                                type="number"
+                                value={productAmount}
+                                onChange={event => setProductAmount(event.target.value)}
+                            />
+                        </label>
+                        <button type="submit"> Add </button>
                     </form>
                 </div>
             </section>
