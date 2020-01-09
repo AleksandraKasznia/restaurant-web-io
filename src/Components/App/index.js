@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {createContext, useReducer} from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
-import {RoleContext} from "../../constants/RoleContext";
 
 import LandingPage from '../LandingPage';
 import SignInPage from '../SignInPage';
@@ -12,11 +11,30 @@ import SupplierPage from "../SupplierPage";
 
 import * as ROUTES from '../../constants/routes'
 
+export const RoleContext = createContext("guest");
+
 
 function App() {
+    const roleReducer = (state, action) => {
+        console.log("weszło")
+        switch (action.type) {
+            case 'loginUser':
+                return {
+
+                    role: action.role
+                };
+            case 'logoutUser':
+                return  {
+                    role: "guest"
+                };
+            default:
+                return state;
+        }
+    };
+    const [role, dispatchRole] = useReducer(roleReducer, "guest");
 
         return (
-            <RoleContext.Provider value={"guest"}>
+            <RoleContext.Provider value={{role: role, dispatchRole: dispatchRole}}>
                 <Router>
                         <Route exact path={ROUTES.LANDING} component={LandingPage} />
                         <Route path={ROUTES.SIGN_IN} component={SignInPage}/>

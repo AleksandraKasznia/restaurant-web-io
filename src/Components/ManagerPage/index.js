@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './ManagerPage.css';
 import LogOut from "../LogOut";
 import Select from "react-select";
 import {MANAGER_ENDPOINT} from "../../constants/apiEndpoints";
+import {RoleContext} from "../App";
 
 const getAllProductsURL = MANAGER_ENDPOINT + '/products';
 const getAllUsersURL = MANAGER_ENDPOINT + '/fetchUsers';
@@ -125,11 +126,14 @@ function ManagerPage() {
         })
     };
 
+    const user = useContext(RoleContext);
+
     return (
         <div className="managerPager">
             <LogOut/>
             <section>
                 <h1>Employees</h1>
+                {console.log(user.role.role + "1")}
                 <div className="formsSection">
                     <form className="addEmployeeForm" onSubmit={event => {
                         event.preventDefault();
