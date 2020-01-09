@@ -7,19 +7,19 @@ import LogOut from "../LogOut";
 function CookPage() {
     const order = {
         orderId: "123",
-        menuItems: ["kiełbasa", "jabłko"],
+        menuItems: ["baked sausage", "whipped cream"],
         isBeingPrepared: true
     };
 
     const order1 = {
-        orderId: "123",
-        menuItems: ["pizza", "jabłko"],
+        orderId: "12331",
+        menuItems: ["sausage", "tomato soup"],
         isBeingPrepared: false
     };
 
     const order3 = {
-        orderId: "123",
-        menuItems: ["pizza", "dupa dupa"],
+        orderId: "11423",
+        menuItems: ["whipped cream"],
         isBeingPrepared: false
     };
 

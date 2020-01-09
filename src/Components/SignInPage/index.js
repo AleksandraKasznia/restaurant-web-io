@@ -6,7 +6,7 @@ import Logo from '../../Icons/waiter.svg';
 function SignInPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [data, setData] = useState(null);
+    const [roles, setRoles] = useState(null);
 
 
     const credentials = 'username='+ username + '&password='+ password;
@@ -27,10 +27,16 @@ function SignInPage() {
                 event.preventDefault();
                 fetch(LOGIN_URL, post)
                     .then(response => response.json())
-                    .then(data => {console.log(data);})
+                    .then(data => {
+                        console.log(data);
+                        let rolesObject = data.map(role => role.authority);
+                        console.log(rolesObject);
+                        setRoles(rolesObject);
+                        console.log(roles);
+                    })
             }}>
               <label>
-                  Username or email:
+                  Username:
               </label>
                   <input
                       type="text"

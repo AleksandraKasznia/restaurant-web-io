@@ -62,7 +62,7 @@ function ManagerPage() {
     }, [doNeedToRefresh]);
 
     const possibleRoles = ["Waiter", "Barman", "Cook", "Supplier", "Manager"];
-    const rolesOptions = possibleRoles.map((role) => ({value: role.toUpperCase(), label: role}));
+    const rolesOptions = possibleRoles.map((role) => ({value: role.toLowerCase(), label: role}));
     const dishOrDrinkOptions = [{value: "DISH", label: "dish"},{value: "DRINK", label: "drink"}];
     const allProductsOptions = allProducts.map((product) => ({value: product.name, label: product.name}));
     const allUsersOptions = allUsers.map((user) => ({value: user.id, label: user.username}));

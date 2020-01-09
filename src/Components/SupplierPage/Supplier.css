@@ -1,0 +1,13 @@
+.supplier {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.supplierDiv {
+    border: 0.2em solid #81b29a;
+    display: flex;
+    flex-direction: column;
+    background-color: #fdfaf4;
+    width: 20%;
+    padding: 2%;
+}
