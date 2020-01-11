@@ -8,6 +8,7 @@ import ManagerPage from '../ManagerPage';
 import BarmanPage from '../BarmanPage';
 import CookPage from "../CookPage";
 import SupplierPage from "../SupplierPage";
+import AdminNavBar from "../AdminNavBar";
 
 import * as ROUTES from '../../constants/routes'
 

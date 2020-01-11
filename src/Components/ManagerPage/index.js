@@ -4,6 +4,9 @@ import LogOut from "../LogOut";
 import Select from "react-select";
 import {MANAGER_ENDPOINT} from "../../constants/apiEndpoints";
 import {RoleContext} from "../App";
+import {useHistory} from 'react-router-dom';
+import * as ROUTES from '../../constants/routes';
+import AdminNavBar from "../AdminNavBar";
 
 const getAllProductsURL = MANAGER_ENDPOINT + '/products';
 const getAllUsersURL = MANAGER_ENDPOINT + '/fetchUsers';
@@ -16,6 +19,14 @@ const deleteMenuItemURL = MANAGER_ENDPOINT + "/deleteMenuItem/";
 const addProductURL = MANAGER_ENDPOINT + '/addProductItem';
 
 function ManagerPage() {
+    let history = useHistory();
+    const user = useContext(RoleContext);
+
+    useEffect(() => {
+        if (user.role.role !== "ROLE_ADMIN" && user.role.role !== "ROLE_MANAGER"){
+            history.push(ROUTES.SIGN_IN);
+        }
+    },[user]);
 
     const [usernameToAdd, setUsernameToAdd] = useState("");
     const [emailToAdd, setEmailToAdd] = useState("");
@@ -40,7 +51,7 @@ function ManagerPage() {
     const newUser = {
         username: usernameToAdd,
         password: passwordToAdd,
-        authorities: roleToAdd,
+        role: roleToAdd,
         email: emailToAdd,
         displayName: null
     };
@@ -62,8 +73,8 @@ function ManagerPage() {
         fetchUserData();
     }, [doNeedToRefresh]);
 
-    const possibleRoles = ["Waiter", "Barman", "Cook", "Supplier", "Manager"];
-    const rolesOptions = possibleRoles.map((role) => ({value: role.toLowerCase(), label: role}));
+    const possibleRoles = ["ROLE_WAITER", "ROLE_BARTENDER", "ROLE_COOK", "ROLE_SUPPLIER", "ROLE_MANAGER"];
+    const rolesOptions = possibleRoles.map((role) => ({value: role, label: role.replace("ROLE_","").toLowerCase()}));
     const dishOrDrinkOptions = [{value: "DISH", label: "dish"},{value: "DRINK", label: "drink"}];
     const allProductsOptions = allProducts.map((product) => ({value: product.name, label: product.name}));
     const allUsersOptions = allUsers.map((user) => ({value: user.id, label: user.username}));
@@ -126,287 +137,292 @@ function ManagerPage() {
         })
     };
 
-    const user = useContext(RoleContext);
+
 
     return (
-        <div className="managerPager">
-            <LogOut/>
-            <section>
-                <h1>Employees</h1>
-                {console.log(user.role.role + "1")}
-                <div className="formsSection">
-                    <form className="addEmployeeForm" onSubmit={event => {
-                        event.preventDefault();
-                        fetch(addUserURL, addUserReq)
-                            .then(response => console.log(response))
-                            .then(() => setDoNeedToRefresh(!doNeedToRefresh))
-                    }}>
-                        <div className="header">
-                        <h3>Add User</h3>
+        <div>
+            {user.role.role === "ROLE_MANAGER" || user.role.role === "ROLE_ADMIN" ?
+                <div className="managerPager">
+                    {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: null}
+                    <LogOut/>
+                    <section>
+                        <h1>Employees</h1>
+                        {console.log(user.role.role + "1")}
+                        <div className="formsSection">
+                            <form className="addEmployeeForm" onSubmit={event => {
+                                event.preventDefault();
+                                fetch(addUserURL, addUserReq)
+                                    .then(response => console.log(response))
+                                    .then(() => setDoNeedToRefresh(!doNeedToRefresh))
+                            }}>
+                                <div className="header">
+                                    <h3>Add User</h3>
+                                </div>
+                                <label>
+                                    <div className="description">
+                                        Choose role:
+                                    </div>
+                                    <Select
+                                        options={rolesOptions}
+                                        onChange={selectedItem => setRoleToAdd(selectedItem.value)}
+                                    />
+                                </label>
+                                <label>
+                                    <div className="description">
+                                        Username:
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={usernameToAdd}
+                                        onChange={event => setUsernameToAdd(event.target.value)}
+                                    />
+                                </label>
+
+                                <label>
+                                    <div className="description">
+                                        Email:
+                                    </div>
+
+                                    <input
+                                        type="text"
+                                        value={emailToAdd}
+                                        onChange={event => setEmailToAdd(event.target.value)}
+                                    />
+                                </label>
+
+                                <label>
+                                    <div className="description">
+                                        Password:
+                                    </div>
+
+                                    <input
+                                        type="password"
+                                        value={passwordToAdd}
+                                        onChange={event => setPasswordToAdd(event.target.value)}
+                                    />
+                                </label>
+
+                                <button type="submit">
+                                    Add
+                                </button>
+                            </form>
+                            <form onSubmit={event => {
+                                event.preventDefault();
+                                fetch(deleteUserURL + userIdToDelete, deleteUserReq)
+                                    .then(result => console.log(result));
+                            }}>
+                                <h3>Delete User</h3>
+                                <label>
+                                    <div className="description">
+                                        id:
+                                    </div>
+                                    <Select
+                                        options={allUsersOptions}
+                                        onChange={selectedItem => setUserIdToDelete(selectedItem.value)}
+                                    />
+                                </label>
+
+                                <button type="submit">
+                                    Delete
+                                </button>
+                            </form>
+                            <form onSubmit={event => {
+                                event.preventDefault();
+                                fetch(updateUserURL, updateUserReq)
+                                    .then(result => console.log(result));
+                            }}>
+                                <h3>Update User</h3>
+                                <label>
+                                    <div className="description">
+                                        id:
+                                    </div>
+                                    <Select
+                                        options={allUsersOptions}
+                                        onChange={selectedItem => setUsernameToUpdate(selectedItem.label)}
+                                    />
+                                </label>
+
+                                <label>
+                                    <div className="description">
+                                        Choose role:
+                                    </div>
+                                    <Select
+                                        options={rolesOptions}
+                                        onChange={selectedItem => setRoleToUpdate(selectedItem.value)}
+                                    />
+                                </label>
+
+                                <label>
+                                    <div className="description">
+                                        Username:
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={usernameToUpdate}
+                                        onChange={event => setUsernameToUpdate(event.target.value)}
+                                    />
+                                </label>
+
+                                <label>
+                                    <div className="description">
+                                        Email:
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={emailToUpdate}
+                                        onChange={event => setEmailToUpdate(event.target.value)}
+                                    />
+                                </label>
+                                <label>
+                                    <div className="description">
+                                        Password:
+                                    </div>
+
+                                    <input
+                                        type="password"
+                                        value={passwordToUpdate}
+                                        onChange={event => setPasswordToUpdate(event.target.value)}
+                                    />
+                                </label>
+
+                                <button type="submit">
+                                    Update
+                                </button>
+                            </form>
                         </div>
-                        <label>
-                            <div className="description">
-                                Choose role:
-                            </div>
-                            <Select
-                                options={rolesOptions}
-                                onChange={selectedItem => setRoleToAdd(selectedItem.value)}
-                            />
-                        </label>
-                        <label>
-                            <div className="description">
-                                Username:
-                            </div>
-                            <input
-                                type="text"
-                                value={usernameToAdd}
-                                onChange={event => setUsernameToAdd(event.target.value)}
-                            />
-                        </label>
+                    </section>
+                    <section>
+                        <h1>Menu Items and Tables</h1>
+                        <div className="formsSection">
+                            <form onSubmit={event => {
+                                event.preventDefault();
+                                console.log(neededProductsToAdd);
+                                fetch(addMenuItemURL, addMenuItemReq)
+                                    .then(response => console.log(response))
+                                    .then(() => setDoNeedToRefresh(!doNeedToRefresh))
+                            }}>
+                                <h3>Add Menu Item</h3>
+                                <label>
+                                    <div className="description">
+                                        Unique name:
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={itemNameToAdd}
+                                        onChange={event => setItemNameToAdd(event.target.value)}
+                                    />
+                                </label>
 
-                        <label>
-                            <div className="description">
-                                Email:
-                            </div>
+                                <label>
+                                    <div className="description">
+                                        Dish or drink:
+                                    </div>
+                                    <Select
+                                        options={dishOrDrinkOptions}
+                                        onChange={selectedItem => setIsDishOrDrinkToAdd(selectedItem.value)}
+                                    />
+                                </label>
 
-                            <input
-                                type="text"
-                                value={emailToAdd}
-                                onChange={event => setEmailToAdd(event.target.value)}
-                            />
-                        </label>
+                                <label>
+                                    <div className="description">
+                                        Needed products:
+                                    </div>
+                                    <Select
+                                        isMulti
+                                        options={allProductsOptions}
+                                        onChange={selectedItem => {setNeededProductsToAdd(selectedItem ? selectedItem.map(item => item.value) : null);
+                                            console.log(selectedItem)
+                                        }}
+                                    />
+                                </label>
+                                <label>
+                                    <div className="description">
+                                        Price:
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={priceToAdd}
+                                        onChange={event => setPriceToAdd(event.target.value)}
+                                    />
+                                </label>
 
-                        <label>
-                            <div className="description">
-                                Password:
-                            </div>
+                                <button type="submit">
+                                    Add
+                                </button>
+                            </form>
+                            <form onSubmit={event => {
+                                event.preventDefault();
+                                fetch(deleteMenuItemURL + itemNameToDelete, deleteMenuItemReq)
+                                    .then(result => console.log(result))
+                            }}>
+                                <h3>Delete Menu Item</h3>
+                                <label>
+                                    <div className="description">
+                                        Item name:
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={itemNameToDelete}
+                                        onChange={event => setItemNameToDelete(event.target.value)}
+                                    />
+                                </label>
 
-                            <input
-                                type="password"
-                                value={passwordToAdd}
-                                onChange={event => setPasswordToAdd(event.target.value)}
-                            />
-                        </label>
-
-                        <button type="submit">
-                            Add
-                        </button>
-                    </form>
-                    <form onSubmit={event => {
-                        event.preventDefault();
-                        fetch(deleteUserURL + userIdToDelete, deleteUserReq)
-                            .then(result => console.log(result));
-                    }}>
-                        <h3>Delete User</h3>
-                        <label>
-                            <div className="description">
-                                id:
-                            </div>
-                            <Select
-                                options={allUsersOptions}
-                                onChange={selectedItem => setUserIdToDelete(selectedItem.value)}
-                            />
-                        </label>
-
-                        <button type="submit">
-                            Delete
-                        </button>
-                    </form>
-                    <form onSubmit={event => {
-                        event.preventDefault();
-                        fetch(updateUserURL, updateUserReq)
-                            .then(result => console.log(result));
-                    }}>
-                        <h3>Update User</h3>
-                        <label>
-                            <div className="description">
-                                id:
-                            </div>
-                            <Select
-                                options={allUsersOptions}
-                                onChange={selectedItem => setUsernameToUpdate(selectedItem.label)}
-                            />
-                        </label>
-
-                        <label>
-                            <div className="description">
-                                Choose role:
-                            </div>
-                            <Select
-                                options={rolesOptions}
-                                onChange={selectedItem => setRoleToUpdate(selectedItem.value)}
-                            />
-                        </label>
-
-                        <label>
-                            <div className="description">
-                                Username:
-                            </div>
-                            <input
-                                type="text"
-                                value={usernameToUpdate}
-                                onChange={event => setUsernameToUpdate(event.target.value)}
-                            />
-                        </label>
-
-                        <label>
-                            <div className="description">
-                                Email:
-                            </div>
-                            <input
-                                type="text"
-                                value={emailToUpdate}
-                                onChange={event => setEmailToUpdate(event.target.value)}
-                            />
-                        </label>
-                        <label>
-                            <div className="description">
-                                Password:
-                            </div>
-
-                            <input
-                                type="password"
-                                value={passwordToUpdate}
-                                onChange={event => setPasswordToUpdate(event.target.value)}
-                            />
-                        </label>
-
-                        <button type="submit">
-                            Update
-                        </button>
-                    </form>
-                </div>
-            </section>
-            <section>
-                <h1>Menu Items and Tables</h1>
-                <div className="formsSection">
-                    <form onSubmit={event => {
-                        event.preventDefault();
-                        console.log(neededProductsToAdd);
-                        fetch(addMenuItemURL, addMenuItemReq)
-                            .then(response => console.log(response))
-                            .then(() => setDoNeedToRefresh(!doNeedToRefresh))
-                    }}>
-                        <h3>Add Menu Item</h3>
-                        <label>
-                            <div className="description">
-                                Unique name:
-                            </div>
-                            <input
-                                type="text"
-                                value={itemNameToAdd}
-                                onChange={event => setItemNameToAdd(event.target.value)}
-                            />
-                        </label>
-
-                        <label>
-                            <div className="description">
-                                Dish or drink:
-                            </div>
-                            <Select
-                                options={dishOrDrinkOptions}
-                                onChange={selectedItem => setIsDishOrDrinkToAdd(selectedItem.value)}
-                            />
-                        </label>
-
-                        <label>
-                            <div className="description">
-                                Needed products:
-                            </div>
-                            <Select
-                                isMulti
-                                options={allProductsOptions}
-                                onChange={selectedItem => {setNeededProductsToAdd(selectedItem ? selectedItem.map(item => item.value) : null);
-                                console.log(selectedItem)
-                                }}
-                            />
-                        </label>
-                        <label>
-                            <div className="description">
-                                Price:
-                            </div>
-                            <input
-                                type="text"
-                                value={priceToAdd}
-                                onChange={event => setPriceToAdd(event.target.value)}
-                            />
-                        </label>
-
-                        <button type="submit">
-                            Add
-                        </button>
-                    </form>
-                    <form onSubmit={event => {
-                        event.preventDefault();
-                        fetch(deleteMenuItemURL + itemNameToDelete, deleteMenuItemReq)
-                            .then(result => console.log(result))
-                    }}>
-                        <h3>Delete Menu Item</h3>
-                        <label>
-                            <div className="description">
-                                Item name:
-                            </div>
-                            <input
-                                type="text"
-                                value={itemNameToDelete}
-                                onChange={event => setItemNameToDelete(event.target.value)}
-                            />
-                        </label>
-
-                        <div className="formButton">
-                            <button type="submit">
-                                Delete
-                            </button>
+                                <div className="formButton">
+                                    <button type="submit">
+                                        Delete
+                                    </button>
+                                </div>
+                            </form>
+                            <form>
+                                <h3>Add a table</h3>
+                                <label>
+                                    <div className="description">
+                                        Number of tables to add:
+                                    </div>
+                                    <input
+                                        type="number"
+                                        value={numberOfTables}
+                                        onChange={event => setNumberOfTables(event.target.value)}
+                                    />
+                                </label>
+                                <button onClick={() => {
+                                    fetch(addTablesURL + numberOfTables, addTableReq)
+                                        .then(response => console.log(response))
+                                }}>Add</button>
+                            </form>
                         </div>
-                    </form>
-                    <form>
-                        <h3>Add a table</h3>
-                        <label>
-                            <div className="description">
-                                Number of tables to add:
-                            </div>
-                            <input
-                                type="number"
-                                value={numberOfTables}
-                                onChange={event => setNumberOfTables(event.target.value)}
-                            />
-                        </label>
-                        <button onClick={() => {
-                            fetch(addTablesURL + numberOfTables, addTableReq)
-                                .then(response => console.log(response))
-                        }}>Add</button>
-                    </form>
-                </div>
-            </section>
-            <section>
-                <h1>Products</h1>
-                <div className="formsSection">
-                    <form onSubmit={event => {
-                        event.preventDefault();
-                        fetch(addProductURL,addProductReq)
-                            .then(result => console.log(result))
-                            .then(() => setDoNeedToRefresh(!doNeedToRefresh))
-                    }}>
-                        <label>
-                            Name:
-                            <input
-                                type="text"
-                                value={productName}
-                                onChange={event => setProductName(event.target.value)}
-                            />
-                        </label>
-                        <label>
-                            Amount
-                            <input
-                                type="number"
-                                value={productAmount}
-                                onChange={event => setProductAmount(event.target.value)}
-                            />
-                        </label>
-                        <button type="submit"> Add </button>
-                    </form>
-                </div>
-            </section>
+                    </section>
+                    <section>
+                        <h1>Products</h1>
+                        <div className="formsSection">
+                            <form onSubmit={event => {
+                                event.preventDefault();
+                                fetch(addProductURL,addProductReq)
+                                    .then(result => console.log(result))
+                                    .then(() => setDoNeedToRefresh(!doNeedToRefresh))
+                            }}>
+                                <label>
+                                    Name:
+                                    <input
+                                        type="text"
+                                        value={productName}
+                                        onChange={event => setProductName(event.target.value)}
+                                    />
+                                </label>
+                                <label>
+                                    Amount
+                                    <input
+                                        type="number"
+                                        value={productAmount}
+                                        onChange={event => setProductAmount(event.target.value)}
+                                    />
+                                </label>
+                                <button type="submit"> Add </button>
+                            </form>
+                        </div>
+                    </section>
+                </div> :
+                alert("You don't have permissions to reach this page")}
         </div>
     );
 }

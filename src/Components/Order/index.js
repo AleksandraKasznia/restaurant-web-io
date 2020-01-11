@@ -1,13 +1,14 @@
-import React, {useState} from "react";
+import React, {useContext} from "react";
 import './Order.css';
 
 
 function Order (order) {
-    const items = order.menuItems.map((item) => <li key={item}> {item} </li>);
 
+    const items = order.items.map((item) => <li key={item.id}> {item.name} </li>);
 
     return (
     <div className="order">
+        {console.log(order[0])}
         <div className="orderId">
             {order.orderId}
         </div>

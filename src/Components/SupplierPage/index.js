@@ -1,10 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Select from 'react-select';
 import './Supplier.css';
 import {SUPPLIER_ENDPOINT} from "../../constants/apiEndpoints";
 import LogOut from "../LogOut";
+import AdminNavBar from "../AdminNavBar";
+import {RoleContext} from "../App";
+import {useHistory} from 'react-router-dom';
 
 function SupplierPage(){
+    let history = useHistory();
+    const user = useContext(RoleContext);
 
     const restockProductURL = SUPPLIER_ENDPOINT + "/supply";
     const getLowAmountProductsURL = SUPPLIER_ENDPOINT + "/requestedItems";
@@ -47,51 +52,55 @@ function SupplierPage(){
 
     return (
         <div>
-            <LogOut/>
-            <div className="supplier">
-                <form onSubmit={event => {
-                    event.preventDefault();
-                    fetch(restockProductURL, restockProductReq)
-                        .then(response => {
-                            if (response.status === 200){
+            {user.role.role === "ROLE_SUPPLIER" || user.role.role === "ROLE_ADMIN" ?
+            <div>
+                {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: null}
+                <LogOut/>
+                <div className="supplier">
+                    <form onSubmit={event => {
+                        event.preventDefault();
+                        fetch(restockProductURL, restockProductReq)
+                            .then(response => {
+                                if (response.status === 200){
 
-                            }
-                            else{
-                                alert("Something went wrong, please try again later")
-                            }
-                        })
-                        .catch(() => alert("There was an unexpected error and the product has not been updated, if you keep seeing this please contact your administrator"))
-                }}>
-                    <h3>Update supply</h3>
-                    <label> Choose the product </label>
-                    <Select options={options}
-                            onChange={selectedItem => setProductToRestockName(selectedItem.value)}
-                    />
-                    <label> Amount of the bought product</label>
-                    <input
-                        type="number"
-                        value={productToRestockAmount}
-                        onChange={event => setProductToRestockAmount(event.target.value)}
-                    />
-                    <button type="submit"> Submit </button>
-                </form>
-                <div className="supplierDiv">
-                    <h3>We're short on:</h3>
-                    <div>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {productsToRestockView}
-                            </tbody>
-                        </table>
+                                }
+                                else{
+                                    alert("Something went wrong, please try again later")
+                                }
+                            })
+                            .catch(() => alert("There was an unexpected error and the product has not been updated, if you keep seeing this please contact your administrator"))
+                    }}>
+                        <h3>Update supply</h3>
+                        <label> Choose the product </label>
+                        <Select options={options}
+                                onChange={selectedItem => setProductToRestockName(selectedItem.value)}
+                        />
+                        <label> Amount of the bought product</label>
+                        <input
+                            type="number"
+                            value={productToRestockAmount}
+                            onChange={event => setProductToRestockAmount(event.target.value)}
+                        />
+                        <button type="submit"> Submit </button>
+                    </form>
+                    <div className="supplierDiv">
+                        <h3>We're short on:</h3>
+                        <div>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {productsToRestockView}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div>: alert("You don't have permissions to reach this page")}
         </div>
     )
 }
