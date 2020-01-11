@@ -3,10 +3,11 @@ import './ManagerPage.css';
 import LogOut from "../LogOut";
 import Select from "react-select";
 import {MANAGER_ENDPOINT} from "../../constants/apiEndpoints";
-import {RoleContext} from "../App";
+import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import AdminNavBar from "../AdminNavBar";
+import {SIGN_IN} from "../../constants/routes";
 
 const getAllProductsURL = MANAGER_ENDPOINT + '/products';
 const getAllUsersURL = MANAGER_ENDPOINT + '/fetchUsers';
@@ -21,12 +22,6 @@ const addProductURL = MANAGER_ENDPOINT + '/addProductItem';
 function ManagerPage() {
     let history = useHistory();
     const user = useContext(RoleContext);
-
-    useEffect(() => {
-        if (user.role.role !== "ROLE_ADMIN" && user.role.role !== "ROLE_MANAGER"){
-            history.push(ROUTES.SIGN_IN);
-        }
-    },[user]);
 
     const [usernameToAdd, setUsernameToAdd] = useState("");
     const [emailToAdd, setEmailToAdd] = useState("");
@@ -422,7 +417,7 @@ function ManagerPage() {
                         </div>
                     </section>
                 </div> :
-                alert("You don't have permissions to reach this page")}
+                (history.push(SIGN_IN))}
         </div>
     );
 }

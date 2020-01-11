@@ -8,7 +8,6 @@ function Order (order) {
 
     return (
     <div className="order">
-        {console.log(order[0])}
         <div className="orderId">
             {order.orderId}
         </div>

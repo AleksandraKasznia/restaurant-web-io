@@ -4,7 +4,7 @@ import './SignInPage.css';
 import Logo from '../../Icons/waiter.svg';
 import {useHistory} from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
-import {RoleContext} from "../App";
+import {RoleContext} from "../App/RoleContext";
 
 function SignInPage() {
     const [username, setUsername] = useState("");

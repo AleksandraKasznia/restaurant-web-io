@@ -4,8 +4,9 @@ import './Supplier.css';
 import {SUPPLIER_ENDPOINT} from "../../constants/apiEndpoints";
 import LogOut from "../LogOut";
 import AdminNavBar from "../AdminNavBar";
-import {RoleContext} from "../App";
+import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
+import {SIGN_IN} from "../../constants/routes";
 
 function SupplierPage(){
     let history = useHistory();
@@ -100,7 +101,7 @@ function SupplierPage(){
                         </div>
                     </div>
                 </div>
-            </div>: alert("You don't have permissions to reach this page")}
+            </div>: (history.push(SIGN_IN))}
         </div>
     )
 }

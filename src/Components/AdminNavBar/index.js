@@ -1,11 +1,8 @@
 import React, {useContext} from "react";
 import {Link} from "react-router-dom";
 import * as ROUTES from '../../constants/routes';
-import {RoleContext} from "../App";
-
 
 function AdminNavBar () {
-    const user = useContext(RoleContext);
 
     return (
         <div>

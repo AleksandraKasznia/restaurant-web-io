@@ -4,44 +4,85 @@ import Order from "../Order";
 
 import LogOut from "../LogOut";
 import AdminNavBar from "../AdminNavBar";
-import {RoleContext} from "../App";
+import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
 import * as ROUTES from "../../constants/routes";
+import {SIGN_IN} from "../../constants/routes";
+import {COOK_ENDPOINT} from "../../constants/apiEndpoints";
 
 function CookPage() {
     let history = useHistory();
     const user = useContext(RoleContext);
 
+    const getOrdersURL = COOK_ENDPOINT + '/getDishOrders';
+    const finalizeOrderURL = COOK_ENDPOINT  + '/changeState';
+    const acceptOrderURL = COOK_ENDPOINT + '/assign';
+
+    const finalizeOrder = (orderId) => {
+        fetch(finalizeOrderURL + "?orderId=" + orderId.toString(), {method: 'PATCH', credentials: 'include'})
+            .then(result => result.json())
+            .then(data => console.log(data))
+    };
+
+    const acceptOrder = (orderId) => {
+        fetch(acceptOrderURL + '?orderId=' + orderId.toString(), {method: 'PATCH', credentials: 'include'})
+            .then(result => result.json())
+            .then(data => console.log(data))
+    };
+
+
+    const [orders, setOrders] = useState([]);
+
+    function buttonValue(x) {return(x.chef) ? "Ready!": "Accept"}
+
+    const [doNeedToReload, setDoNeedToReload] = useState(false);
+
+    const fetchData = async () => {
+        fetch(getOrdersURL,{method: 'GET', credentials: 'include'})
+            .then(result => result.json())
+            .then(data => {setOrders(data.map((item) => ({items: item.dishes, orderId: item.id, stage: item.stage, chef: item.chef})));
+                console.log(data)})
+    };
+
     useEffect(() => {
-        console.log(user.role.role)
-        if (user.role.role !== "ROLE_ADMIN" && user.role.role !== "ROLE_COOK"){
-            history.push(ROUTES.SIGN_IN);
-        }
-    },[user]);
+        fetchData()
+            .then(() => {console.log(orders)})
 
-    const order = {
-        orderId: "123",
-        menuItems: ["baked sausage", "whipped cream"],
-        isBeingPrepared: true
-    };
+    }, []);
 
-    const order1 = {
-        orderId: "12331",
-        menuItems: ["sausage", "tomato soup"],
-        isBeingPrepared: false
-    };
 
-    const order3 = {
-        orderId: "11423",
-        menuItems: ["whipped cream"],
-        isBeingPrepared: false
-    };
+    const [awaitingOrders, setAwaitingOrders] = useState(null);
+    const [ordersBeingPrepared, setOrdersBeingPrepared] = useState(null);
 
-    function buttonValue(x) {return(x.isBeingPrepared) ? "Ready!": "Accept"}
-    const [orders, setOrders] = useState([order, order1, order3]);
-    const [awaitingOrders, setAwaitingOrders] = useState((orders.filter((order) => !order.isBeingPrepared)).map((item) => <div className="order"><Order {...item}/><button className={item.orderId}>{buttonValue(item)}</button></div>));
-    const [ordersBeingPrepared, setOrdersBeingPrepared] = useState((orders.filter((order) => order.isBeingPrepared)).map((item) => <div className="order"><Order {...item}/><button className={item.orderId}>{buttonValue(item)}</button></div>));
+    useEffect(() => {
+        console.log("jestem w ordersach");
+        setAwaitingOrders( orders ? (orders.filter((order) => (order.stage === "IN_PROGRESS" || order.stage === "BEVERAGE_COMPLETE") && (order.chef === null)).map(order => (<div className="order">
+            <Order {...order}/>
+            {console.log(order.stage)}
+            <button
+                className={order.orderId}
+                onClick={() => {
+                    acceptOrder(order.orderId);
+                    order.chef = 10;
+                    setDoNeedToReload(!doNeedToReload);
+                    console.log(orders, awaitingOrders, ordersBeingPrepared)}}
+            >{buttonValue(order)}</button>
+        </div>))) : null);
 
+        setOrdersBeingPrepared(orders ? (orders.filter((order) => order.chef !== null)).map(order => (<div className="order">
+            <Order {...order}/>
+            {console.log(order.chef)}
+            <button
+                className={order.orderId}
+                onClick={() => {
+                    finalizeOrder(order.orderId);
+                    order.chef = null;
+                    order.stage = "FINISHED";
+                    setDoNeedToReload(!doNeedToReload);
+                    console.log(orders, awaitingOrders, ordersBeingPrepared)}}
+            >{buttonValue(order)}</button>
+        </div>)) : null)
+    },[orders, doNeedToReload]);
     return (
         <div>
             {user.role.role === "ROLE_COOK" || user.role.role === "ROLE_ADMIN" ?
@@ -65,7 +106,7 @@ function CookPage() {
                         </div>
                     </div>
                 </div>:
-                alert("You don't have permissions to reach this page")}
+                (history.push(SIGN_IN))}
         </div>
     )
 }
