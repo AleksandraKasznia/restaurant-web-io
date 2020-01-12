@@ -1,34 +1,57 @@
 .formsSection{
     display: flex;
     justify-content: space-evenly;
+    padding-bottom: 9vh;
+    height: 30em;
 }
 
-.addEmployeeForm{
-
+body{
+    background-color: #F4F4F4;
 }
 
-.managerPage form{
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(228,228,234);
-    width: 20%;
-    padding: 2%;
+.employees{
+    background-color: #F4F4F4;
 }
 
-.managerPage input{
-    width: 70%;
+.table {
+    border-color:   #FF8848  ;
 }
+
+.product {
+    border-color:   #48FF88  ;
+}
+
+.menu {
+    border-color:   #B248FF  ;
+}
+
+.user {
+    border-color:   #487AFF  ;
+}
+
+
 
 .managerPage h1,h3{
     text-align: center;
-}
-
-.header{
-    background-color: #81b29a;
-    border: 0.15em solid #3d405b;
 }
 
 .managerPage form button{
     background-color: #09d3ac;
     width: 20%;
 }
+
+h1 {
+    padding: 5vh;
+    font-size: 6vh;
+}
+
+.tablesAndMenu{
+    padding-top: 1vh;
+    background-color: #A7A7A7;
+}
+
+.tablesAndMenu h1 {
+    color: white;
+}
+
+

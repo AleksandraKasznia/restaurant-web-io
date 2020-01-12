@@ -1,22 +1,36 @@
 body {
-  background-color: #e07a5f;
+  background-color: white;
 }
 form{
   border: 0.2em solid #81b29a;
+  border-radius: 1em;
   display: flex;
   flex-direction: column;
-  background-color: #fdfaf4;
-  width: 20%;
-  padding: 2%;
+  background-color: white;
+  width: 20vw;
+  padding: 3vmin;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-input{
-  width: 70%;
+form input{
+  width: 18.6vw;
+  border-radius: 0.3em;
+  border:  0.1em solid lightgray;
+  padding: 0.9vh;
+}
+
+h1 {
+  text-align: center;
+}
+h3 {
+  margin-top: -0.7vh;
+  font-size: 3vh;
+  text-align: center;
 }
 
 form button {
-  margin-top: 10%;
-  width: 40%;
+  margin-top: 3vh;
+  width: 8em;
   text-align: center;
   position: relative;
   background: none;

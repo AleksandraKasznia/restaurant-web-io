@@ -2,8 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import Select from 'react-select';
 import './Supplier.css';
 import {SUPPLIER_ENDPOINT} from "../../constants/apiEndpoints";
-import LogOut from "../LogOut";
-import AdminNavBar from "../AdminNavBar";
+import AdminNavBar from "../NavBars/AdminNavBar";
 import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
 import {SIGN_IN} from "../../constants/routes";
@@ -56,7 +55,6 @@ function SupplierPage(){
             {user.role.role === "ROLE_SUPPLIER" || user.role.role === "ROLE_ADMIN" ?
             <div>
                 {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: null}
-                <LogOut/>
                 <div className="supplier">
                     <form onSubmit={event => {
                         event.preventDefault();

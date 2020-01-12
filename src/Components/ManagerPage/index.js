@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
 import './ManagerPage.css';
-import LogOut from "../LogOut";
 import Select from "react-select";
 import {MANAGER_ENDPOINT} from "../../constants/apiEndpoints";
 import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
-import * as ROUTES from '../../constants/routes';
-import AdminNavBar from "../AdminNavBar";
+import AdminNavBar from "../NavBars/AdminNavBar";
 import {SIGN_IN} from "../../constants/routes";
+import UserNavBar from "../NavBars/UserNavBar";
+import Footer from "../Footer";
 
 const getAllProductsURL = MANAGER_ENDPOINT + '/products';
 const getAllUsersURL = MANAGER_ENDPOINT + '/fetchUsers';
@@ -138,13 +138,13 @@ function ManagerPage() {
         <div>
             {user.role.role === "ROLE_MANAGER" || user.role.role === "ROLE_ADMIN" ?
                 <div className="managerPager">
-                    {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: null}
-                    <LogOut/>
-                    <section>
+                    {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: <UserNavBar/>}
+                    <section className="employees">
                         <h1>Employees</h1>
                         {console.log(user.role.role + "1")}
+                        <div> </div>
                         <div className="formsSection">
-                            <form className="addEmployeeForm" onSubmit={event => {
+                            <form className="user" onSubmit={event => {
                                 event.preventDefault();
                                 fetch(addUserURL, addUserReq)
                                     .then(response => console.log(response))
@@ -157,11 +157,12 @@ function ManagerPage() {
                                     <div className="description">
                                         Choose role:
                                     </div>
+                                </label>
                                     <Select
                                         options={rolesOptions}
                                         onChange={selectedItem => setRoleToAdd(selectedItem.value)}
                                     />
-                                </label>
+
                                 <label>
                                     <div className="description">
                                         Username:
@@ -201,7 +202,7 @@ function ManagerPage() {
                                     Add
                                 </button>
                             </form>
-                            <form onSubmit={event => {
+                            <form className="user" onSubmit={event => {
                                 event.preventDefault();
                                 fetch(deleteUserURL + userIdToDelete, deleteUserReq)
                                     .then(result => console.log(result));
@@ -221,7 +222,7 @@ function ManagerPage() {
                                     Delete
                                 </button>
                             </form>
-                            <form onSubmit={event => {
+                            <form className="user" onSubmit={event => {
                                 event.preventDefault();
                                 fetch(updateUserURL, updateUserReq)
                                     .then(result => console.log(result));
@@ -286,10 +287,10 @@ function ManagerPage() {
                             </form>
                         </div>
                     </section>
-                    <section>
+                    <section className="tablesAndMenu">
                         <h1>Menu Items and Tables</h1>
                         <div className="formsSection">
-                            <form onSubmit={event => {
+                            <form className="menu" onSubmit={event => {
                                 event.preventDefault();
                                 console.log(neededProductsToAdd);
                                 fetch(addMenuItemURL, addMenuItemReq)
@@ -345,7 +346,7 @@ function ManagerPage() {
                                     Add
                                 </button>
                             </form>
-                            <form onSubmit={event => {
+                            <form className="menu" onSubmit={event => {
                                 event.preventDefault();
                                 fetch(deleteMenuItemURL + itemNameToDelete, deleteMenuItemReq)
                                     .then(result => console.log(result))
@@ -368,7 +369,7 @@ function ManagerPage() {
                                     </button>
                                 </div>
                             </form>
-                            <form>
+                            <form className="table">
                                 <h3>Add a table</h3>
                                 <label>
                                     <div className="description">
@@ -390,12 +391,15 @@ function ManagerPage() {
                     <section>
                         <h1>Products</h1>
                         <div className="formsSection">
-                            <form onSubmit={event => {
+                            <form className="product" onSubmit={event => {
                                 event.preventDefault();
                                 fetch(addProductURL,addProductReq)
                                     .then(result => console.log(result))
                                     .then(() => setDoNeedToRefresh(!doNeedToRefresh))
                             }}>
+                                <div>
+                                    <h3>Add product</h3>
+                                </div>
                                 <label>
                                     Name:
                                     <input
@@ -416,8 +420,10 @@ function ManagerPage() {
                             </form>
                         </div>
                     </section>
-                </div> :
-                (history.push(SIGN_IN))}
+                    <Footer/>
+                </div>
+
+                : (history.push(SIGN_IN))}
         </div>
     );
 }

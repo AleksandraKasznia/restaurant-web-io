@@ -1,0 +1,14 @@
+.AdminNavBar{
+    background-color:  #154e4a;
+    color: white;
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 1vh;
+    height: 4vh;
+}
+
+.AdminNavBar a {
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}

@@ -1,12 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 import './BarmanPage.css';
 import Order from "../Order";
-import LogOut from "../LogOut";
 import {BARMAN_ENDPOINT} from "../../constants/apiEndpoints";
 import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
-import AdminNavBar from "../AdminNavBar";
+import AdminNavBar from "../NavBars/AdminNavBar";
 import {SIGN_IN} from "../../constants/routes";
 
 function BarmanPage() {
@@ -90,7 +89,6 @@ function BarmanPage() {
             {user.role.role === "ROLE_BARTENDER" || user.role.role === "ROLE_ADMIN" ?
                 <div>
                     {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: null}
-                    <LogOut/>
                     <button onClick={() => fetchData()}> Refresh </button>
                     <div className="barmanPage">
 

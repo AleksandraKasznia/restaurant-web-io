@@ -2,8 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import './CookPage.css';
 import Order from "../Order";
 
-import LogOut from "../LogOut";
-import AdminNavBar from "../AdminNavBar";
+import AdminNavBar from "../NavBars/AdminNavBar";
 import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
 import * as ROUTES from "../../constants/routes";
@@ -88,7 +87,6 @@ function CookPage() {
             {user.role.role === "ROLE_COOK" || user.role.role === "ROLE_ADMIN" ?
                 <div>
                     {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: null}
-                    <LogOut/>
                     <button> Refresh </button>
                     <div className="cookPage">
 
