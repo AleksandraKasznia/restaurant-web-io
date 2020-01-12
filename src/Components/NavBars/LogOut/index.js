@@ -7,12 +7,14 @@ function LogOut() {
     let post = {
         method: 'POST',
         credentials: 'include',
-        body: {}
     };
 
     function handleClick () {
         fetch(LOGOUT_URL, post)
-            .then(response => console.log(response));
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong" + err);
+            })
     }
 
     return (

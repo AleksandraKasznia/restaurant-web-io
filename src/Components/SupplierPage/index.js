@@ -14,13 +14,11 @@ function SupplierPage(){
     const user = useContext(RoleContext);
 
     const restockProductURL = SUPPLIER_ENDPOINT + "/supply";
-    const getLowAmountProductsURL = SUPPLIER_ENDPOINT + "/requestedItems";
     const getAllProductsURL = SUPPLIER_ENDPOINT + "/products";
 
     const [productToRestockName, setProductToRestockName] = useState("");
     const [productToRestockAmount,setProductToRestockAmount] = useState(0);
     const [allProducts, setAllProducts] = useState([]);
-    const [doNeedToRefresh, setDoNeedToRefresh] = useState(false);
 
     const options = allProducts.map((product) => ({value: product.name, label: product.name}));
     const productsToRestock= allProducts.filter((product) => product.productStatus === "LOW");
@@ -30,9 +28,7 @@ function SupplierPage(){
         const fetchAllProducts = async () => {
             fetch(getAllProductsURL, {method: 'GET', credentials: 'include'})
                 .then(result => result.json())
-                .then(data => {
-                    console.log(data);
-                    setAllProducts(data)})
+                .then(data => setAllProducts(data))
                 .catch(err => {
                     console.log(err);
                     alert("Can't load products, please contact your administrator or check the err message in the console");

@@ -1,10 +1,9 @@
-import React, {useContext} from "react";
+import React from "react";
 import './Order.css';
 
 
 function Order (order) {
-
-    const items = order.items.map((item) => <li key={item.name}> {item.name} </li>);
+    const items = order.items.map((item) => <li key={item.name}> {item.name}</li>);
 
     return (
     <div className="singleOrder">

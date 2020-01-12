@@ -5,7 +5,6 @@ import Order from "../Order";
 import AdminNavBar from "../NavBars/AdminNavBar";
 import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
-import * as ROUTES from "../../constants/routes";
 import {SIGN_IN} from "../../constants/routes";
 import {COOK_ENDPOINT} from "../../constants/apiEndpoints";
 import Footer from "../Footer";
@@ -22,13 +21,11 @@ function CookPage() {
     const finalizeOrder = (orderId) => {
         fetch(finalizeOrderURL + "?orderId=" + orderId.toString(), {method: 'PATCH', credentials: 'include'})
             .then(result => result.json())
-            .then(data => console.log(data))
     };
 
     const acceptOrder = (orderId) => {
         fetch(acceptOrderURL + '?orderId=' + orderId.toString(), {method: 'PATCH', credentials: 'include'})
             .then(result => result.json())
-            .then(data => console.log(data))
     };
 
 
@@ -41,14 +38,15 @@ function CookPage() {
     const fetchData = async () => {
         fetch(getOrdersURL,{method: 'GET', credentials: 'include'})
             .then(result => result.json())
-            .then(data => {setOrders(data.map((item) => ({items: item.dishes, orderId: item.id, stage: item.stage, chef: item.chef})));
-                console.log(data)})
+            .then(data => setOrders(data.map((item) => ({items: item.dishes, orderId: item.id, stage: item.stage, chef: item.chef}))))
     };
 
     useEffect(() => {
         fetchData()
-            .then(() => {console.log(orders)})
-
+            .catch(err => {
+                console.log(err);
+                alert("Can't load resources, please refresh the page, if you keep seeing this error please contact your administrator");
+            })
     }, []);
 
 
@@ -56,31 +54,26 @@ function CookPage() {
     const [ordersBeingPrepared, setOrdersBeingPrepared] = useState(null);
 
     useEffect(() => {
-        console.log("jestem w ordersach");
         setAwaitingOrders( orders ? (orders.filter((order) => (order.stage === "IN_PROGRESS" || order.stage === "BEVERAGE_COMPLETE") && (order.chef === null)).map(order => (<div className="waitingOrders">
             <Order {...order}/>
-            {console.log(order.stage)}
             <button
                 className={order.orderId}
                 onClick={() => {
                     acceptOrder(order.orderId);
                     order.chef = 10;
-                    setDoNeedToReload(!doNeedToReload);
-                    console.log(orders, awaitingOrders, ordersBeingPrepared)}}
+                    setDoNeedToReload(!doNeedToReload);}}
             >{buttonValue(order)}</button>
         </div>))) : null);
 
         setOrdersBeingPrepared(orders ? (orders.filter((order) => order.chef !== null)).map(order => (<div className="acceptedOrders">
             <Order {...order}/>
-            {console.log(order.chef)}
             <button
                 className={order.orderId}
                 onClick={() => {
                     finalizeOrder(order.orderId);
                     order.chef = null;
                     order.stage = "FINISHED";
-                    setDoNeedToReload(!doNeedToReload);
-                    console.log(orders, awaitingOrders, ordersBeingPrepared)}}
+                    setDoNeedToReload(!doNeedToReload);}}
             >{buttonValue(order)}</button>
         </div>)) : null)
     },[orders, doNeedToReload]);

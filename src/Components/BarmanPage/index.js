@@ -4,7 +4,6 @@ import Order from "../Order";
 import {BARMAN_ENDPOINT} from "../../constants/apiEndpoints";
 import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
-import * as ROUTES from '../../constants/routes';
 import AdminNavBar from "../NavBars/AdminNavBar";
 import UserNavBar from "../NavBars/UserNavBar";
 import Footer from "../Footer";
@@ -21,14 +20,16 @@ function BarmanPage() {
 
     const finalizeOrder = (orderId) => {
         fetch(finalizeOrderURL + "?orderId=" + orderId.toString(), {method: 'PATCH', credentials: 'include'})
-            .then(result => result.json())
-            .then(data => console.log(data))
+            .catch(err => {
+                console.log(err);
+            })
     };
 
     const acceptOrder = (orderId) => {
         fetch(acceptOrderURL + '?orderId=' + orderId.toString(), {method: 'PATCH', credentials: 'include'})
-            .then(result => result.json())
-            .then(data => console.log(data))
+            .catch(err => {
+                console.log(err);
+            })
     };
 
 
@@ -42,15 +43,15 @@ function BarmanPage() {
     const fetchData = async () => {
         fetch(getOrdersURL,{method: 'GET', credentials: 'include'})
             .then(result => result.json())
-            .then(data => {setOrders(data.map((item) => ({items: item.beverages, orderId: item.id, stage: item.stage, barman: item.bartender})));
-                console.log(data)})
+            .then(data => setOrders(data.map((item) => ({items: item.beverages, orderId: item.id, stage: item.stage, barman: item.bartender}))))
     };
 
     useEffect(() => {
         fetchData()
-            .then(() => {console.log(orders)});
-        console.log("jestem w fetchującym")
-
+            .catch(err => {
+                console.log(err);
+                alert("Can't load resources, please refresh the page, if you keep seeing this error please contact your administrator");
+            });
     }, []);
 
 
@@ -58,7 +59,6 @@ function BarmanPage() {
     const [ordersBeingPrepared, setOrdersBeingPrepared] = useState(null);
 
     useEffect(() => {
-        console.log("jestem w ordersach");
         setAwaitingOrders( orders ? (orders.filter((order) => (order.stage === "IN_PROGRESS" || order.stage === "DISH_COMPLETE") && (order.barman === null)).map(order => (<div className="waitingOrders">
             <Order {...order}/>
             <button
@@ -66,8 +66,7 @@ function BarmanPage() {
                 onClick={() => {
                     acceptOrder(order.orderId);
                     order.barman = 10;
-                    setDoNeedToReload(!doNeedToReload);
-                    console.log(orders, awaitingOrders, ordersBeingPrepared)}}
+                    setDoNeedToReload(!doNeedToReload);}}
             >{buttonValue(order)}</button>
         </div>))) : null);
 
@@ -79,8 +78,7 @@ function BarmanPage() {
                     finalizeOrder(order.orderId);
                     order.barman = null;
                     order.stage = "FINISHED";
-                    setDoNeedToReload(!doNeedToReload);
-                    console.log(orders, awaitingOrders, ordersBeingPrepared)}}
+                    setDoNeedToReload(!doNeedToReload);}}
             >{buttonValue(order)}</button>
         </div>)) : null)
     },[orders, doNeedToReload]);

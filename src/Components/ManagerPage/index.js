@@ -342,9 +342,7 @@ function ManagerPage() {
                                     <Select
                                         isMulti
                                         options={allProductsOptions}
-                                        onChange={selectedItem => {setNeededProductsToAdd(selectedItem ? selectedItem.map(item => item.value) : null);
-                                            console.log(selectedItem)
-                                        }}
+                                        onChange={selectedItem => setNeededProductsToAdd(selectedItem ? selectedItem.map(item => item.value) : null)}
                                     />
                                 </label>
                                 <label>

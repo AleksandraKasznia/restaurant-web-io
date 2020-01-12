@@ -28,7 +28,6 @@ function SignInPage() {
     useEffect(() => {
         if (role !== ""){
             user.dispatchRole({type: 'loginUser', role: role});
-            console.log(role)
             switch (role) {
                 case "ROLE_BARTENDER":
                     history.push(ROUTES.BARMAN);
@@ -46,7 +45,7 @@ function SignInPage() {
                     history.push(ROUTES.COOK);
                     break;
                 default:
-                    alert("Unable to authenticate user, please contact your administrator")
+                    alert("Unable to authenticate user, please contact your administrator");
                     break;
             }
         }
@@ -55,16 +54,14 @@ function SignInPage() {
     return (
         <div>
             <div className="signInPage">
-                <img src={Logo} />
+                <img src={Logo} alt="logo"/>
                 <form
                     onSubmit={event => {
                         event.preventDefault();
                         fetch(LOGIN_URL, post)
                             .then(response => response.json())
                             .then(data => {
-                                console.log(data);
                                 let rolesObject = data.map(role => role.authority);
-                                console.log(rolesObject);
                                 if (rolesObject.includes("ROLE_ADMIN")){
                                     setRole("ROLE_ADMIN");
                                 }

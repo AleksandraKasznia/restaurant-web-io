@@ -8,7 +8,7 @@ import Footer from "../Footer";
 const LandingPage = () => (
     <div>
         <div className="landingPage">
-            <img src={Logo}/>
+            <img src={Logo} alt="logo"/>
             <h1> Restaurant-io </h1>
             <div className="loginButton">
                 <Link to={SIGN_IN}>
