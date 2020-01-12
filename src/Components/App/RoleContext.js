@@ -25,7 +25,6 @@ function RoleProvider(props) {
     const [role, dispatchRole] = useReducer(roleReducer, localState || initialState);
 
     useEffect(() => {
-        console.log(role);
         localStorage.setItem("role", JSON.stringify(role));
     }, [role]);
 

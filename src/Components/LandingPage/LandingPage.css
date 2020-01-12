@@ -1,26 +1,28 @@
-
 .landingPage {
-    margin-top: 5%;
     display: flex;
     flex-direction: column;
+    height: 93.9vh;
+    text-align: center;
+}
+
+.landingPage h1 {
+    margin-top: -4vh;
 }
 
 img {
+    margin-top: 10vh;
     height: 50vh;
     margin-left: 4%;
 }
 
-.loginButton {
-    margin-top: 2%;
-    text-align: center;
+.landingPage button {
+    margin-top: -3vh;
+    height: calc(8vh + 15px);
+    width: calc(12vw + 20px);
+    min-width: 15px;
+    font-size: calc(1vw + 10px);
+
 }
 
-button {
-    width: 10%;
-}
-
-.landingPage h1 {
-    margin-left: 44vw;
-}
 
 

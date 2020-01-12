@@ -12,7 +12,7 @@ import Footer from "../Footer";
 const getAllProductsURL = MANAGER_ENDPOINT + '/products';
 const getAllUsersURL = MANAGER_ENDPOINT + '/fetchUsers';
 const addUserURL = MANAGER_ENDPOINT + '/signup';
-const deleteUserURL = MANAGER_ENDPOINT + '/deleteUser/';
+const deleteUserURL = MANAGER_ENDPOINT + '/deleteUserId/';
 const updateUserURL = MANAGER_ENDPOINT + '/update';
 const addMenuItemURL = MANAGER_ENDPOINT + '/addMenuItem';
 const addTablesURL = MANAGER_ENDPOINT + "/addTables/";
@@ -141,14 +141,18 @@ function ManagerPage() {
                     {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: <UserNavBar/>}
                     <section className="employees">
                         <h1>Employees</h1>
-                        {console.log(user.role.role + "1")}
                         <div> </div>
                         <div className="formsSection">
                             <form className="user" onSubmit={event => {
                                 event.preventDefault();
                                 fetch(addUserURL, addUserReq)
-                                    .then(response => console.log(response))
-                                    .then(() => setDoNeedToRefresh(!doNeedToRefresh))
+                                    .then(() => {
+                                        setDoNeedToRefresh(!doNeedToRefresh);
+                                        setUsernameToAdd("");
+                                        setEmailToAdd("");
+                                        setPasswordToAdd("");
+                                        setRoleToAdd("");
+                                    })
                             }}>
                                 <div className="header">
                                     <h3>Add User</h3>
@@ -205,7 +209,10 @@ function ManagerPage() {
                             <form className="user" onSubmit={event => {
                                 event.preventDefault();
                                 fetch(deleteUserURL + userIdToDelete, deleteUserReq)
-                                    .then(result => console.log(result));
+                                    .then(() =>{
+                                        setUserIdToDelete("");
+                                        setDoNeedToRefresh(!doNeedToRefresh);
+                                    });
                             }}>
                                 <h3>Delete User</h3>
                                 <label>
@@ -225,7 +232,13 @@ function ManagerPage() {
                             <form className="user" onSubmit={event => {
                                 event.preventDefault();
                                 fetch(updateUserURL, updateUserReq)
-                                    .then(result => console.log(result));
+                                    .then(() => {
+                                        setUsernameToUpdate("");
+                                        setRoleToUpdate("");
+                                        setEmailToUpdate("");
+                                        setUsernameToUpdate("");
+                                        setPasswordToUpdate("");
+                                    });
                             }}>
                                 <h3>Update User</h3>
                                 <label>
@@ -292,10 +305,13 @@ function ManagerPage() {
                         <div className="formsSection">
                             <form className="menu" onSubmit={event => {
                                 event.preventDefault();
-                                console.log(neededProductsToAdd);
                                 fetch(addMenuItemURL, addMenuItemReq)
-                                    .then(response => console.log(response))
-                                    .then(() => setDoNeedToRefresh(!doNeedToRefresh))
+                                    .then(() => {
+                                        setDoNeedToRefresh(!doNeedToRefresh);
+                                        setItemNameToAdd("");
+                                        setPriceToAdd("");
+                                        setIsDishOrDrinkToAdd("");
+                                    })
                             }}>
                                 <h3>Add Menu Item</h3>
                                 <label>
@@ -349,7 +365,9 @@ function ManagerPage() {
                             <form className="menu" onSubmit={event => {
                                 event.preventDefault();
                                 fetch(deleteMenuItemURL + itemNameToDelete, deleteMenuItemReq)
-                                    .then(result => console.log(result))
+                                    .then(() => {
+                                        setItemNameToDelete("");
+                                    })
                             }}>
                                 <h3>Delete Menu Item</h3>
                                 <label>
@@ -369,7 +387,13 @@ function ManagerPage() {
                                     </button>
                                 </div>
                             </form>
-                            <form className="table">
+                            <form className="table" onSubmit={event => {
+                                event.preventDefault();
+                                fetch(addTablesURL + numberOfTables, addTableReq)
+                                    .then(() => {
+                                        setNumberOfTables(1);
+                                    })
+                            }}>
                                 <h3>Add a table</h3>
                                 <label>
                                     <div className="description">
@@ -381,10 +405,7 @@ function ManagerPage() {
                                         onChange={event => setNumberOfTables(event.target.value)}
                                     />
                                 </label>
-                                <button onClick={() => {
-                                    fetch(addTablesURL + numberOfTables, addTableReq)
-                                        .then(response => console.log(response))
-                                }}>Add</button>
+                                <button  type="submit">Add</button>
                             </form>
                         </div>
                     </section>
@@ -394,8 +415,11 @@ function ManagerPage() {
                             <form className="product" onSubmit={event => {
                                 event.preventDefault();
                                 fetch(addProductURL,addProductReq)
-                                    .then(result => console.log(result))
-                                    .then(() => setDoNeedToRefresh(!doNeedToRefresh))
+                                    .then(() => {
+                                        setDoNeedToRefresh(!doNeedToRefresh);
+                                        setProductName("");
+                                        setProductAmount(0);
+                                    })
                             }}>
                                 <div>
                                     <h3>Add product</h3>

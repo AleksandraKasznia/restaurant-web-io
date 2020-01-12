@@ -1,13 +1,34 @@
 .supplier {
+    padding-top: 10vh;
+    height: 77.8vh;
     display: flex;
     justify-content: space-evenly;
 }
 
 .supplierDiv {
-    border: 0.2em solid #81b29a;
+    font-size: 17px;
+    height: calc(180px + 10vh);
+    border: 0.2em solid #FF359A;
+    border-radius: 1em;
+    background-color: white;
     display: flex;
     flex-direction: column;
-    background-color: #fdfaf4;
-    width: 20%;
-    padding: 2%;
+    width: calc(17vw + 60px);
+    padding: 3vmin;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.supplier form {
+    height: calc(180px + 10vh);
+    border-color: #5FFE3D;
+}
+
+.supplier button {
+    border-color: #5FFE3D;
+}
+
+.supplier table {
+    margin-left: 1em;
+    text-align: left;
+    width: calc(40px + 20vw);
 }

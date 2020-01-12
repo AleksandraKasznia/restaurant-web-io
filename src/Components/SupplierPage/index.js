@@ -3,6 +3,8 @@ import Select from 'react-select';
 import './Supplier.css';
 import {SUPPLIER_ENDPOINT} from "../../constants/apiEndpoints";
 import AdminNavBar from "../NavBars/AdminNavBar";
+import UserNavBar from "../NavBars/UserNavBar";
+import Footer from "../Footer";
 import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
 import {SIGN_IN} from "../../constants/routes";
@@ -54,14 +56,13 @@ function SupplierPage(){
         <div>
             {user.role.role === "ROLE_SUPPLIER" || user.role.role === "ROLE_ADMIN" ?
             <div>
-                {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: null}
+                {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: <UserNavBar/>}
                 <div className="supplier">
                     <form onSubmit={event => {
                         event.preventDefault();
                         fetch(restockProductURL, restockProductReq)
                             .then(response => {
                                 if (response.status === 200){
-
                                 }
                                 else{
                                     alert("Something went wrong, please try again later")
@@ -100,6 +101,7 @@ function SupplierPage(){
                     </div>
                 </div>
             </div>: (history.push(SIGN_IN))}
+            <Footer/>
         </div>
     )
 }

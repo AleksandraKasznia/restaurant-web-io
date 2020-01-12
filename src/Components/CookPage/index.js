@@ -8,6 +8,8 @@ import {useHistory} from 'react-router-dom';
 import * as ROUTES from "../../constants/routes";
 import {SIGN_IN} from "../../constants/routes";
 import {COOK_ENDPOINT} from "../../constants/apiEndpoints";
+import Footer from "../Footer";
+import UserNavBar from "../NavBars/UserNavBar";
 
 function CookPage() {
     let history = useHistory();
@@ -55,7 +57,7 @@ function CookPage() {
 
     useEffect(() => {
         console.log("jestem w ordersach");
-        setAwaitingOrders( orders ? (orders.filter((order) => (order.stage === "IN_PROGRESS" || order.stage === "BEVERAGE_COMPLETE") && (order.chef === null)).map(order => (<div className="order">
+        setAwaitingOrders( orders ? (orders.filter((order) => (order.stage === "IN_PROGRESS" || order.stage === "BEVERAGE_COMPLETE") && (order.chef === null)).map(order => (<div className="waitingOrders">
             <Order {...order}/>
             {console.log(order.stage)}
             <button
@@ -68,7 +70,7 @@ function CookPage() {
             >{buttonValue(order)}</button>
         </div>))) : null);
 
-        setOrdersBeingPrepared(orders ? (orders.filter((order) => order.chef !== null)).map(order => (<div className="order">
+        setOrdersBeingPrepared(orders ? (orders.filter((order) => order.chef !== null)).map(order => (<div className="acceptedOrders">
             <Order {...order}/>
             {console.log(order.chef)}
             <button
@@ -86,10 +88,9 @@ function CookPage() {
         <div>
             {user.role.role === "ROLE_COOK" || user.role.role === "ROLE_ADMIN" ?
                 <div>
-                    {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: null}
-                    <button> Refresh </button>
+                    {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: <UserNavBar/>}
+                    <button className="refreshButton" onClick={() => fetchData()}> Refresh orders</button>
                     <div className="cookPage">
-
                         <div>
                             <h1>Awaiting Orders</h1>
                             <div className="ordersPanel">
@@ -105,6 +106,7 @@ function CookPage() {
                     </div>
                 </div>:
                 (history.push(SIGN_IN))}
+                <Footer/>
         </div>
     )
 }

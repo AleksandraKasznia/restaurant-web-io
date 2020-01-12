@@ -1,27 +1,51 @@
 .barmanPage{
     display: flex;
     justify-content: space-evenly;
+    min-height: 79.1vh;
 }
 
 .ordersPanel {
-    margin-top: 5vh;
+    margin-top: -5vh;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    border: 0.2em solid #3d405b;
     width: 35vw;
+    border-color: white;
 }
 
 .barmanPage h1 {
+    font-size: calc(3vmin + 20px);
+    margin-top: -2vh;
     text-align: center;
 }
 
-.order {
-    margin: 1vw;
+.waitingOrders {
+    margin-bottom: 1vh;
+    margin-top: 1vh;
+    padding: 2vmin;
+    border: 0.2em solid #6335FF;
+    border-radius: 1em;
+}
+.acceptedOrders{
+    margin-top: 1vh;
+    padding: 2vmin;
+    border: 0.2em solid #48FF88;
+    border-radius: 1em;
 }
 
-.order button {
-    width: 5vw;
-    height: 2vw;
-    text-align: center;
+.acceptedOrders button {
+    border-color: #48FF88;
+    font-weight: bold;
+}
+
+.waitingOrders button {
+    border-color: #6335FF;
+    font-weight: bold;
+}
+
+.refreshButton {
+    margin-left: 2em;
+    border-color: #FF359A;
+    font-weight: bold;
+    height: 4em;
 }

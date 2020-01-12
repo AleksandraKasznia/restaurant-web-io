@@ -1,14 +1,12 @@
 .orderId {
-    margin-top: -1vw;
-    background-color: #81b29a;
-    padding: 1vmin;
+    font-weight: bold;
+    font-size: calc(1vmin + 10px);
+}
+
+li {
+    list-style-type: none;
 }
 
 .menuItems {
-    background-color: #fbf1ef;
-    padding: 1vmin;
-}
-
-li{
-    list-style-type: none;
+    margin-top: 1vh;
 }

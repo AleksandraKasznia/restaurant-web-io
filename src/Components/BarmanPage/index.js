@@ -6,6 +6,8 @@ import {RoleContext} from "../App/RoleContext";
 import {useHistory} from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import AdminNavBar from "../NavBars/AdminNavBar";
+import UserNavBar from "../NavBars/UserNavBar";
+import Footer from "../Footer";
 import {SIGN_IN} from "../../constants/routes";
 
 function BarmanPage() {
@@ -57,7 +59,7 @@ function BarmanPage() {
 
     useEffect(() => {
         console.log("jestem w ordersach");
-        setAwaitingOrders( orders ? (orders.filter((order) => (order.stage === "IN_PROGRESS" || order.stage === "DISH_COMPLETE") && (order.barman === null)).map(order => (<div className="order">
+        setAwaitingOrders( orders ? (orders.filter((order) => (order.stage === "IN_PROGRESS" || order.stage === "DISH_COMPLETE") && (order.barman === null)).map(order => (<div className="waitingOrders">
             <Order {...order}/>
             <button
                 className={order.orderId}
@@ -69,7 +71,7 @@ function BarmanPage() {
             >{buttonValue(order)}</button>
         </div>))) : null);
 
-        setOrdersBeingPrepared(orders ? (orders.filter((order) => order.barman !== null)).map(order => (<div className="order">
+        setOrdersBeingPrepared(orders ? (orders.filter((order) => order.barman !== null)).map(order => (<div className="acceptedOrders">
             <Order {...order}/>
             <button
                 className={order.orderId}
@@ -88,10 +90,9 @@ function BarmanPage() {
         <div>
             {user.role.role === "ROLE_BARTENDER" || user.role.role === "ROLE_ADMIN" ?
                 <div>
-                    {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: null}
-                    <button onClick={() => fetchData()}> Refresh </button>
+                    {user.role.role === "ROLE_ADMIN" ? <AdminNavBar/>: <UserNavBar/>}
+                    <button className="refreshButton" onClick={() => fetchData()}> Refresh </button>
                     <div className="barmanPage">
-
                         <div>
                             <h1>Awaiting Orders</h1>
                             <div className="ordersPanel">
@@ -108,7 +109,7 @@ function BarmanPage() {
                 </div>:
                 (history.push(SIGN_IN))
             }
-
+            <Footer/>
         </div>
     )
 }

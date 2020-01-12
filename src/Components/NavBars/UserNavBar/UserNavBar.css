@@ -3,8 +3,8 @@
     color: white;
     display: flex;
     padding-top: 1vh;
-    padding-left: 1vh;
-    height: 4vh;
+    padding-left: 2em;
+    height: 3em;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 

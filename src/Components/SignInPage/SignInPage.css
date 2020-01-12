@@ -1,5 +1,5 @@
 .signInPage {
-    margin-top: 10vh;
+    margin-top: 3.9vh;
     display: flex;
     justify-content: center;
 }
@@ -11,6 +11,6 @@
 .signInPage form {
     border-bottom-left-radius: 50px;
     margin-left: -13%;
-    margin-top: 10%;
-    height: 22vh;
+    margin-top: 13%;
+    height: calc(8vh + 130px);
 }

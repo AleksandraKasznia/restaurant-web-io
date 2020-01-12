@@ -5,6 +5,7 @@ import Logo from '../../Icons/waiter.svg';
 import {useHistory} from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import {RoleContext} from "../App/RoleContext";
+import Footer from "../Footer";
 
 function SignInPage() {
     const [username, setUsername] = useState("");
@@ -52,46 +53,50 @@ function SignInPage() {
     },[role]);
 
     return (
-        <div className="signInPage">
-              <img src={Logo} />
-              <form
-                onSubmit={event => {
-                    event.preventDefault();
-                    fetch(LOGIN_URL, post)
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                            let rolesObject = data.map(role => role.authority);
-                            console.log(rolesObject);
-                            if (rolesObject.includes("ROLE_ADMIN")){
-                                setRole("ROLE_ADMIN");
-                            }
-                            else{
-                                setRole(rolesObject[0]);
-                            }
-                        })
-                }}>
-                  <label>
-                      Username:
-                  </label>
-                      <input
-                          type="text"
-                          value={username}
-                          onChange={event => setUsername(event.target.value)}
-                      />
-                  <label>
-                      Password:
-                  </label>
-                      <input
-                          type="password"
-                          value={password}
-                          onChange={event => setPassword(event.target.value)}
-                      />
-                  <button>
-                      Log In
-                  </button>
-              </form>
-          </div>
+        <div>
+            <div className="signInPage">
+                <img src={Logo} />
+                <form
+                    onSubmit={event => {
+                        event.preventDefault();
+                        fetch(LOGIN_URL, post)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                let rolesObject = data.map(role => role.authority);
+                                console.log(rolesObject);
+                                if (rolesObject.includes("ROLE_ADMIN")){
+                                    setRole("ROLE_ADMIN");
+                                }
+                                else{
+                                    setRole(rolesObject[0]);
+                                }
+                            })
+                    }}>
+                    <label>
+                        Username:
+                    </label>
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={event => setUsername(event.target.value)}
+                    />
+                    <label>
+                        Password:
+                    </label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={event => setPassword(event.target.value)}
+                    />
+                    <button>
+                        Log In
+                    </button>
+                </form>
+            </div>
+            <Footer/>
+        </div>
+
     );
 }
 

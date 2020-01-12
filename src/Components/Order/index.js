@@ -4,10 +4,10 @@ import './Order.css';
 
 function Order (order) {
 
-    const items = order.items.map((item) => <li key={item.id}> {item.name} </li>);
+    const items = order.items.map((item) => <li key={item.name}> {item.name} </li>);
 
     return (
-    <div className="order">
+    <div className="singleOrder">
         <div className="orderId">
             {order.orderId}
         </div>
