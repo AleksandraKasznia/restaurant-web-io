@@ -29,7 +29,13 @@ body{
     border-color:   #487AFF  ;
 }
 
+.feedback button {
+    border-color:   #487AFF  ;
+}
 
+.feedback{
+    margin-top: 30px;
+}
 
 .managerPage h1,h3{
     text-align: center;

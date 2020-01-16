@@ -8,6 +8,7 @@ import AdminNavBar from "../NavBars/AdminNavBar";
 import {SIGN_IN} from "../../constants/routes";
 import UserNavBar from "../NavBars/UserNavBar";
 import Footer from "../Footer";
+import DownloadLink from "react-download-link";
 
 const getAllProductsURL = MANAGER_ENDPOINT + '/products';
 const getAllUsersURL = MANAGER_ENDPOINT + '/fetchUsers';
@@ -18,6 +19,7 @@ const addMenuItemURL = MANAGER_ENDPOINT + '/addMenuItem';
 const addTablesURL = MANAGER_ENDPOINT + "/addTables/";
 const deleteMenuItemURL = MANAGER_ENDPOINT + "/deleteMenuItem/";
 const addProductURL = MANAGER_ENDPOINT + '/addProductItem';
+const getFeedbackURL = MANAGER_ENDPOINT + '/feedbackEmployees';
 
 function ManagerPage() {
     let history = useHistory();
@@ -43,6 +45,7 @@ function ManagerPage() {
     const [allProducts, setAllProducts] = useState([]);
     const [doNeedToRefresh, setDoNeedToRefresh] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
+    const [feedback,setFeedback] = useState("");
     const newUser = {
         username: usernameToAdd,
         password: passwordToAdd,
@@ -50,6 +53,21 @@ function ManagerPage() {
         email: emailToAdd,
         displayName: null
     };
+    async function getFeedback() {
+        try {
+            const resp1 = await fetch(getFeedbackURL, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            const resp = ((await resp1.json()).map(object => JSON.stringify(object) + "\n")).toString();
+            console.log(resp);
+            setFeedback(resp)
+        }
+        catch (e) {
+            alert("Sorry there was an error, please make a reservation via phone call");
+            console.log(e);
+        }
+    }
 
     useEffect(() => {
         const fetchProductData = async () => {
@@ -66,6 +84,7 @@ function ManagerPage() {
 
         fetchProductData();
         fetchUserData();
+        getFeedback();
     }, [doNeedToRefresh]);
 
     const possibleRoles = ["ROLE_WAITER", "ROLE_BARTENDER", "ROLE_COOK", "ROLE_SUPPLIER", "ROLE_MANAGER"];
@@ -131,7 +150,6 @@ function ManagerPage() {
             amount: productAmount
         })
     };
-
 
 
     return (
@@ -408,7 +426,7 @@ function ManagerPage() {
                         </div>
                     </section>
                     <section>
-                        <h1>Products</h1>
+                        <h1>Products and Feedback</h1>
                         <div className="formsSection">
                             <form className="product" onSubmit={event => {
                                 event.preventDefault();
@@ -440,6 +458,16 @@ function ManagerPage() {
                                 </label>
                                 <button type="submit"> Add </button>
                             </form>
+                            <div className="feedback">
+                                <h3>Get feedback </h3>
+                                <DownloadLink
+                                    filename="feedback.txt"
+                                    exportFile={() => feedback}
+                                    tagName = "button"
+                                >
+                                    Get feedback
+                                </DownloadLink>
+                            </div>
                         </div>
                     </section>
                     <Footer/>
